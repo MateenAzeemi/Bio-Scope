@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Text, View, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import LoginStyle from '../styles/LoginStyle';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -16,16 +17,11 @@ const LoginScreen = () => {
         email: username, // Assuming username is actually an email
         password: password,
       });
-      
 
       if (response.data.status === 'ok') {
         Alert.alert('Success', 'Login successful');
+        route.params.onLogin(); // Call the onLogin function
         navigation.navigate('Hello');
-        
-        navigation.navigate('ProfileScreen');
-        
-
-        // You can also navigate to a different screen here if needed
       } else {
         Alert.alert('Error', response.data.data || 'Login failed');
       }
@@ -37,7 +33,7 @@ const LoginScreen = () => {
   return (
     <View style={LoginStyle.container}>
       <Image
-        source={require('../assets/image.png')} // Replace with your local image path
+        source={require('../assets/image.png')}
         style={LoginStyle.backgroundImage}
       />
 
